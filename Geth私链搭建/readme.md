@@ -1,171 +1,55 @@
-一：账户相关
+<a name="RNZqm"></a>
+# 一：准备genesis.json文件
+文件内容如下：
+```json
+{
+    "config": {
+        "chainId": 2008, 
+        "homesteadBlock": 0,
+        "eip150Block": 0,
+        "eip155Block": 0,
+        "eip158Block": 0,
+        "byzantiumBlock": 0,
+        "constantinopleBlock": 0,
+        "petersburgBlock": 0,
+        "istanbulBlock": 0,
+        "berlinBlock": 0,
+        "londonBlock": 0
+    },
+    "alloc": {},
+    "coinbase": "0x0000000000000000000000000000000000000000",
+    "difficulty": "0x20000",
+    "extraData": "",
+    "gasLimit": "0x2fefd8",
+    "nonce": "0x0000000000000042",
+    "mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "timestamp": "0x00"
+}
+```
+
+<a name="T9PSX"></a>
+# 二：命令行启动（标准模式）
+2.1     打开cmd（管理员模式），进入到geth所在的文件夹<br />2.2     执行命令`geth --datadir data init genesis.json`<br />![捕获1.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660837411470-7df52ea3-1a74-41dd-951e-a407d475f553.png#averageHue=%2313a10e&clientId=ucf5c93d2-2478-4&from=ui&id=uf7fc0bda&originHeight=357&originWidth=966&originalType=binary&ratio=1&rotation=0&showTitle=false&size=24817&status=done&style=none&taskId=u1d889b0a-fa4e-4daa-8ff7-a4917055c72&title=)<br />————此页面代表执行成功<br />注意：此时，geth文件夹中出现了data文件夹：<br />![捕获5.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1661173407946-d62e32b8-5e16-4bb8-8bab-6ec994d77edf.png#averageHue=%23fbfaf8&clientId=u2024b9cf-2be4-4&from=ui&id=uc3925ee8&originHeight=173&originWidth=507&originalType=binary&ratio=1&rotation=0&showTitle=false&size=10506&status=done&style=none&taskId=u81182eeb-6273-4e2d-b258-63dbdc2d9f9&title=)<br />2.3     执行命令<br />`geth --datadir ./data --networkid 2008 --port 30303 --http --http.addr 0.0.0.0 --http.vhosts "*" --http.api "db,net,eth,web3,personal" --http.corsdomain "*" --snapshot=false --allow-insecure-unlock`<br />**四个要注意的细节：**
+
+- "--datadir ./data"，与2.2命令结合起来看，代表要将区块的数据放入哪个文件夹，因此两处命令的文件夹名称必须一致
+- networkid一定要和genesis.json中的chainId参数一致
+- 与http相关的所有参数可以不写，如果不写，将无法和MetaMask等钱包进行交互（之前的版本使用的是rpc，后来改成了http）
+- --allow-insecure--unlock参数可以不写，如果不写，意味着每次转账都需要先解锁账户，这个后面会再次提到
+
+![捕获2.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660837638402-b2e87720-a03e-4555-8de3-c3f968ade362.png#averageHue=%231c1c1c&clientId=ucf5c93d2-2478-4&from=ui&height=601&id=u35de5d9f&originHeight=679&originWidth=993&originalType=binary&ratio=1&rotation=0&showTitle=false&size=78363&status=done&style=none&taskId=ubfa76189-6bdb-4b40-a320-8e2b683f7d5&title=&width=879)<br />————此页面代表执行成功<br />2.4     新打开一个cmd（管理员模式），无需进入geth所在文件夹，直接执行命令：`geth attach ipc:\\.\pipe\geth.ipc`<br />特别注意：之前的那个cmd不能关闭<br />![捕获3.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660838409060-0afbf0f1-bbd0-4763-90e5-f6c377496fa5.png#averageHue=%2300130c&clientId=ucf5c93d2-2478-4&from=ui&id=u59f06c8e&originHeight=220&originWidth=576&originalType=binary&ratio=1&rotation=0&showTitle=false&size=9773&status=done&style=none&taskId=u892a466e-7bda-457d-a05c-26e55539069&title=)<br />————此页面代表执行成功<br />**至此，标准模式下的Geth已启动，私链已初始化完成**
+
+<a name="MI1gz"></a>
+# 一些补充：
+<a name="tWCuw"></a>
+## 1. Geth关闭后，如何重启
+经常有朋友把geth关了后，就不知道怎么重启了，这里统一做个说明
+
+- 如下有两个界面：
+
+上面这个界面称为A，下面称为B<br />![捕获3.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1661172994910-969c94e8-5a4b-4763-90e5-f63e7007f0a5.png#averageHue=%2300130c&clientId=u2024b9cf-2be4-4&from=ui&id=u65608928&originHeight=329&originWidth=873&originalType=binary&ratio=1&rotation=0&showTitle=false&size=16331&status=done&style=none&taskId=u2790cf01-be6f-47b6-8619-bff2ea586df&title=)<br />![捕获4.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1661173005328-42a2bc1b-a61a-48c9-9416-82c65ad77971.png#averageHue=%232b2b2b&clientId=u2024b9cf-2be4-4&from=ui&id=uf8d49f3b&originHeight=377&originWidth=851&originalType=binary&ratio=1&rotation=0&showTitle=false&size=37883&status=done&style=none&taskId=udcf989a9-b77a-425a-ae0d-6e609fe6e89&title=)<br />——如果仅关闭A：<br />**重启方案：**以管理员模式打开cmd，无需进入到geth文件夹，直接输入`geth attach ipc:\\.\pipe\geth.ipc`<br />——如果A与B都关了：<br />**重启方案：**以管理员模式打开cmd，进入geth文件夹，再输入：`geth --datadir ./data --networkid 2008 --port 30303 --http --http.addr 0.0.0.0 --http.vhosts "*" --http.api "db,net,eth,web3,personal" --http.corsdomain "*" --snapshot=false --allow-insecure-unlock`<br />然后，用管理员模式打开一个新的cmd，无需进入geth文件夹，直接输入`geth attach ipc:\\.\pipe\geth.ipc`<br />——如果仅关闭B：此情况不存在，因为把B关了A就不运行了，等于A也同时被关了
+<a name="iNzWZ"></a>
+## 
 
-我们先执行账户查询的操作：`eth.accounts`
 
-![alt text](image.png)
 
-发现什么也没有，是因为我们还没有在自己的私链上创建或导入以太坊地址
-
-![alt text](image-1.png)
-
-好的，我们现在来创建一个，执行命令：`personal.newAccount()`，然后输入密码，确认密码，即可生成新的以太坊地址
-
-再次执行`eth.accounts`，发现已经有了一个地址
-
-![alt text](image-2.png)
-
-新生成的地址肯定是没有钱的，通过以下两行命令都可以获取到该账户的余额
-
-`eth.getBalance("以太坊地址")`
-
-`eth.getBalance(eth.accounts[0])`，刚刚生成的地址保存在 eth.accounts 数组中
-
-![alt text](image-3.png)
-
-——对于私链中第一个地址，默认为 eth.coinbase，因此还有另外一种获取余额的方式：
-
-`eth.getBalance(eth.coinbase)`
-
-![alt text](image-4.png)
-
-二：挖矿相关
-
-账户里没有钱（以太坊）怎么办，两个方法：一个让其他地址转钱，另一个方法是挖矿
-
-当然，由于这条区块链是新搭建的，链上还没有生成任何的币（其他以太坊地址的币与此链并不相通，因为链 ID 不同），因此我们先来尝试挖矿的方法：
-
-执行命令`miner.start()`，这里返回"null"是正常现象
-
-![alt text](image-5.png)
-
-然后在另一个 cmd 中，发现正在疯狂地更新数据：
-
-![alt text](image-6.png)
-
-出现红色箭头所指的特殊符号，代表挖矿成功（emmmm，发现挖矿如此快其实是之前在 genesis.json 文件中初始定义的挖矿难度太低导致的，如果想折磨自己的话，可以把难度值调大一点）
-
-现在我们把挖矿关停，执行命令：`miner.stop()`，这里返回"null"也是正常现象
-
-![alt text](image-7.png)
-
-———其实还可以多线程挖矿：`miner.start(5)`，这里同时开五个线程，然后发现其实可能没什么茑用，除非你的电脑是四核/八核及以上 CPU
-
-挖了这么多区块，可以用 `eth.blockNumber`来查询以下当前的区块高度
-
-![alt text](image-8.png)
-
-有了币，我们再来获取一下余额：
-
-![alt text](image-9.png)
-
-这余额数字那么大，根本数不过来，但其实这个余额是用"wei"单位来表示的（1 ETH = 1e18 Wei），因此要去掉 18 个 0
-
-执行命令：`web3.fromWei(eth.getBalance(eth.accounts[0]),'ether')`，即可将余额用 ETH 单位来表示
-
-![alt text](image-10.png)
-
-三：转账/交易相关
-
-我们要在此链上发布一笔转账，这里就转钱给自己的 MetaMask 账户吧
-
-——算了算了，这样太快了，还是先用本地存储的账户来先测试一下
-
-新填一个账户：
-
-![alt text](image-11.png)
-
-通过以下命令执行转账操作：三个参数 from,to,value
-
-`eth.sendTransaction({from: eth.accounts[0],to:eth.accounts[1],value:web3.toWei(10,'ether')})`
-
-然后尴尬地发现居然报错了：
-
-![alt text](image-12.png)
-
-原因是 from 账户没有被解锁（unlock），为了保证转账的发起者不是别人而是自己，需要先对账户进行解锁（其实是身份核验）
-
-执行如下命令，然后输入密码，即可解锁（返回 true）
-
-`personal.unlockAccount(eth.accounts[0])`
-
-![alt text](image-13.png)
-
-再次执行转账命令：
-
-![alt text](image-14.png)
-
-出现绿色的一串 16 进制数，代表成功，这一串数字是交易哈希
-
-——如果没有出现，可以检查下是否余额足够
-
-但是，这只是生成了交易，还没有将交易的数据上链
-
-因此，挖矿吧：
-
-![alt text](image-15.png)
-
-然后，就可以在刚刚挖到的第一个区块找到这笔交易了
-
-我们通过：`eth.getBlock(区块号)`命令来获取某区块的所有数据，我这边是 265
-
-![alt text](image-16.png)
-
-看到"transactions"这一行，发现里面存储了刚刚那笔交易的哈希
-
-——如果 transactions 没有数据，原因就是交易不在该区块中，区块号没有找对
-
-除此之外，还可以通过以下命令获取到交易的具体信息：
-
-`eth.getTransaction("交易哈希")`
-
-![alt text](image-17.png)
-
-很好，现在你已经知道如何发起一笔转账并查询交易数据了，接下来再用 MetaMask 钱包来过一下瘾
-
-四：与 MetaMask 交互
-
-首先，你得有一个 MetaMask 的钱包，没有就先下载一个
-
-先要导入本地的 "localhost" 网络：
-
-![alt text](image-18.png)
-
-发现这儿没有，需要自己添加
-
-![alt text](image-19.png)
-
-除了链 ID 写自己 genesis.json 里的 chainId 外，其他直接照填
-
-————然后就可以发起转账了
-
-![alt text](image-20.png)
-
-——可能出现了账户又被 unlock 了，这个时候需要再解锁一下 from 账户
-
-交易完成后，发现 MetaMask 多了几个 ETH：
-
-![alt text](image-21.png)
-
-当然，这不是主网的 ETH 啦，是刚刚自己搭建的区块链上的 ETH
-
-五：其他操作：
-
-5.1 换一个人挖矿
-
-刚刚上面的操作，挖矿只能是 eth.coinbase 这个账户在挖，现在我们打算换一个账户：
-
-就换我们自己 MetaMask 的账户来挖吧：
-
-首先执行如下操作：
-
-`miner.setEtherbase("地址")`
-
-返回 true 后再进行挖矿：
-
-![alt text](image-22.png)
-
-然后发现钱包多了好多 ETH，刚刚还是 10 个的
-
-![alt text](image-23.png)
-
-———以后的智能合约测试直接用本地自己搭建的链就行了，因为有用不完的 ETH

@@ -1,99 +1,36 @@
-一：准备 genesis.json 文件
+<a name="BUyfe"></a>
+# 一：账户相关
+我们先执行账户查询的操作：`eth.accounts`<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660839076601-2979f92a-ac18-4998-a3eb-61a35cce4aa8.png#averageHue=%2300140d&clientId=u293be87c-fe34-4&from=paste&height=95&id=u90ae07c8&originHeight=95&originWidth=350&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3101&status=done&style=none&taskId=u48128dfe-4481-4ef0-be34-249f9a44ccf&title=&width=350)<br />发现什么也没有，是因为我们还没有在自己的私链上创建或导入以太坊地址<br />好的，我们现在来创建一个，执行命令：`personal.newAccount()`，然后输入密码，确认密码，即可生成新的以太坊地址<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660839212453-0ee3fcfa-b999-49a4-8599-0b0cc92bfbef.png#averageHue=%2301180c&clientId=u293be87c-fe34-4&from=paste&height=111&id=ub826672f&originHeight=111&originWidth=460&originalType=binary&ratio=1&rotation=0&showTitle=false&size=7540&status=done&style=none&taskId=u01288189-4bb3-47f3-a48c-a710c89f35b&title=&width=460)<br />再次执行`eth.accounts`，发现已经有了一个地址<br />![捕获6.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660839455013-35c28150-6538-4ce4-b906-450b2515efb9.png#averageHue=%23146b10&clientId=u293be87c-fe34-4&from=ui&id=ud75e6943&originHeight=68&originWidth=467&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3802&status=done&style=none&taskId=u99e3154d-9796-4555-8158-75b4b72d0af&title=)<br />新生成的地址肯定是没有钱的，通过以下两行命令都可以获取到该账户的余额<br />`eth.getBalance("以太坊地址")`<br />`eth.getBalance(eth.accounts[0])`，刚刚生成的地址保存在eth.accounts数组中<br />![捕获7.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660839634081-eb17973b-925c-4e61-b88c-d5ffa63b3113.png#averageHue=%2300130c&clientId=u293be87c-fe34-4&from=ui&id=uab1d59cf&originHeight=107&originWidth=639&originalType=binary&ratio=1&rotation=0&showTitle=false&size=6196&status=done&style=none&taskId=u9bf0a710-7685-4d43-b7de-b460ace484a&title=)<br />——对于私链中第一个地址，默认为eth.coinbase，因此还有另外一种获取余额的方式：<br />`eth.getBalance(eth.coinbase)`<br />![捕获8.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660839825217-0612f184-8562-4161-bdf5-e5a4d877f4dc.png#averageHue=%23136b10&clientId=u293be87c-fe34-4&from=ui&id=u4a2b148e&originHeight=105&originWidth=447&originalType=binary&ratio=1&rotation=0&showTitle=false&size=5670&status=done&style=none&taskId=u6b6d1eab-2cc0-4a56-8435-f52637436ac&title=)
 
-文件内容如下：
 
-```
-{
-    "config": {
-        "chainId": 2008,
-        "homesteadBlock": 0,
-        "eip150Block": 0,
-        "eip155Block": 0,
-        "eip158Block": 0,
-        "byzantiumBlock": 0,
-        "constantinopleBlock": 0,
-        "petersburgBlock": 0,
-        "istanbulBlock": 0,
-        "berlinBlock": 0,
-        "londonBlock": 0
-    },
-    "alloc": {},
-    "coinbase": "0x0000000000000000000000000000000000000000",
-    "difficulty": "0x20000",
-    "extraData": "",
-    "gasLimit": "0x2fefd8",
-    "nonce": "0x0000000000000042",
-    "mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "timestamp": "0x00"
-}
-```
+<a name="bq502"></a>
+# 二：挖矿相关
+账户里没有钱（以太坊）怎么办，两个方法：一个让其他地址转钱，另一个方法是挖矿<br />当然，由于这条区块链是新搭建的，链上还没有生成任何的币（其他以太坊地址的币与此链并不相通，因为链ID不同），因此我们先来尝试挖矿的方法：<br />执行命令`miner.start()`，这里返回"null"是正常现象<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660840212283-e277a9b5-3d50-444f-92b1-ad22ad8d7eb7.png#averageHue=%23101c17&clientId=u293be87c-fe34-4&from=paste&height=64&id=u96b69052&originHeight=51&originWidth=132&originalType=binary&ratio=1&rotation=0&showTitle=false&size=683&status=done&style=none&taskId=u9da5a13b-2bb2-4f0f-8cca-a2d7ae04c66&title=&width=165)<br />然后在另一个cmd中，发现正在疯狂地更新数据：<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660840464326-794078a9-1e06-4443-940d-4b376661bc85.png#averageHue=%23191717&clientId=u72533ad4-fb4d-4&from=paste&height=392&id=u54aeea82&originHeight=392&originWidth=960&originalType=binary&ratio=1&rotation=0&showTitle=false&size=36295&status=done&style=none&taskId=uf255bd69-25ca-4039-9119-6e78df3a9bd&title=&width=960)<br />出现红色箭头所指的特殊符号，代表挖矿成功（emmmm，发现挖矿如此快其实是之前在genesis.json文件中初始定义的挖矿难度太低导致的，如果想折磨自己的话，可以把难度值调大一点）<br />现在我们把挖矿关停，执行命令：`miner.stop()`，这里返回"null"也是正常现象<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660840788718-6b808624-641a-44aa-87a2-0d12fd2e580d.png#averageHue=%23143213&clientId=u72533ad4-fb4d-4&from=paste&height=65&id=uea29a4dd&originHeight=51&originWidth=127&originalType=binary&ratio=1&rotation=0&showTitle=false&size=745&status=done&style=none&taskId=u39618812-da87-4b47-ae2d-0e0c2c473ac&title=&width=161)<br />———其实还可以多线程挖矿：`miner.start(5)`，这里同时开五个线程，然后发现其实可能没什么茑用，除非你的电脑是四核/八核及以上CPU<br />挖了这么多区块，可以用 `eth.blockNumber`来查询以下当前的区块高度<br />![捕获99.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660844304599-14e56b9a-5b41-43be-a1ad-69310ef4d074.png#averageHue=%2300130c&clientId=u12ad8043-c891-4&from=ui&height=61&id=u4c7408af&originHeight=57&originWidth=146&originalType=binary&ratio=1&rotation=0&showTitle=false&size=864&status=done&style=none&taskId=u74d31b6c-e0ea-4681-b56d-128f7ffc3b7&title=&width=156)<br />有了币，我们再来获取一下余额：<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660841369821-e4c5069a-ed40-46be-9bf1-9a85f698b2ee.png#averageHue=%23101613&clientId=u72533ad4-fb4d-4&from=paste&height=73&id=ue04982e5&originHeight=65&originWidth=270&originalType=binary&ratio=1&rotation=0&showTitle=false&size=1060&status=done&style=none&taskId=uec6546c4-f8b1-4c5e-b80a-f7b33ade0c3&title=&width=305)<br />这余额数字那么大，根本数不过来，但其实这个余额是用"wei"单位来表示的（1 ETH = 1e18 Wei），因此要去掉18个0<br />执行命令：`web3.fromWei(eth.getBalance(eth.accounts[0]),'ether')`，即可将余额用ETH单位来表示<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660841612296-e81a5b81-2104-47d4-9242-992b878d53d4.png#averageHue=%230c1814&clientId=u72533ad4-fb4d-4&from=paste&height=62&id=ud236a7f6&originHeight=57&originWidth=451&originalType=binary&ratio=1&rotation=0&showTitle=false&size=1437&status=done&style=none&taskId=u38439866-b6f0-4ddd-8531-1dbdb911e42&title=&width=494)
 
-二：命令行启动（标准模式）
 
-2.1 打开 cmd（管理员模式），进入到 geth 所在的文件夹
+<a name="MUx4w"></a>
+# 三：转账/交易相关
+我们要在此链上发布一笔转账，这里就转钱给自己的MetaMask账户吧<br />——算了算了，这样太快了，还是先用本地存储的账户来先测试一下<br />新填一个账户：<br />![捕获19.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660842485168-b4620578-638a-4268-8cb7-0b699cf1fed5.png#averageHue=%2313a10e&clientId=u12ad8043-c891-4&from=ui&id=ubb755a7e&originHeight=113&originWidth=745&originalType=binary&ratio=1&rotation=0&showTitle=false&size=5371&status=done&style=none&taskId=ud90616d0-cd2f-4685-802f-677a69dc57d&title=)<br />通过以下命令执行转账操作：三个参数from,to,value<br />`eth.sendTransaction({from: eth.accounts[0],to:eth.accounts[1],value:web3.toWei(10,'ether')})`<br />然后尴尬地发现居然报错了：<br />![捕获25.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660842914831-6f6263c1-b8bc-4c47-ac9b-d53d3ad48292.png#averageHue=%2300130c&clientId=u12ad8043-c891-4&from=ui&id=ud7afc541&originHeight=92&originWidth=754&originalType=binary&ratio=1&rotation=0&showTitle=false&size=5122&status=done&style=none&taskId=u5241a687-3bc5-4d58-9321-e337dc57a39&title=)<br />原因是from账户没有被解锁（unlock），为了保证转账的发起者不是别人而是自己，需要先对账户进行解锁（其实是身份核验）<br />执行如下命令，然后输入密码，即可解锁（返回true）<br />`personal.unlockAccount(eth.accounts[0])`<br />![捕获28.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660843149204-bd618b6b-0f63-4f84-856b-4ce0b701a612.png#averageHue=%23151e1a&clientId=u12ad8043-c891-4&from=ui&height=75&id=u670645d3&originHeight=68&originWidth=474&originalType=binary&ratio=1&rotation=0&showTitle=false&size=2861&status=done&style=none&taskId=u018eceea-e4c9-46a5-a534-f2d9bc085fa&title=&width=526)<br />再次执行转账命令：<br />![捕获29.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660843207540-a8f2e34a-3891-4fa3-9b4b-3ed9fba73d5b.png#averageHue=%2313a10e&clientId=u12ad8043-c891-4&from=ui&id=u1a5bb6be&originHeight=55&originWidth=760&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3814&status=done&style=none&taskId=ue2507534-3dd1-435e-8a84-ea1d94eaae9&title=)<br />出现绿色的一串16进制数，代表成功，这一串数字是交易哈希<br />——如果没有出现，可以检查下是否余额足够<br />但是，这只是生成了交易，还没有将交易的数据上链<br />因此，挖矿吧：<br />![捕获29.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660843476712-bf2a7da4-2920-4f79-aae5-a546b9899f4c.png#averageHue=%23101d18&clientId=u12ad8043-c891-4&from=ui&height=80&id=u7e7b47f8&originHeight=67&originWidth=175&originalType=binary&ratio=1&rotation=0&showTitle=false&size=1209&status=done&style=none&taskId=u91863ccf-5bb8-403d-9e99-aa784d9788e&title=&width=209)<br />然后，就可以在刚刚挖到的第一个区块找到这笔交易了<br />我们通过：`eth.getBlock(区块号)`命令来获取某区块的所有数据，我这边是265<br />![捕获30.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660843707271-8b2b8e3d-a9e8-4ed8-b57f-62b3d867a450.png#averageHue=%2312a00d&clientId=u12ad8043-c891-4&from=ui&id=u9e84b0cb&originHeight=453&originWidth=854&originalType=binary&ratio=1&rotation=0&showTitle=false&size=20852&status=done&style=none&taskId=u78ddd937-8d96-4ec7-aede-245f24ff9b4&title=)<br />看到"transactions"这一行，发现里面存储了刚刚那笔交易的哈希<br />——如果transactions没有数据，原因就是交易不在该区块中，区块号没有找对<br />除此之外，还可以通过以下命令获取到交易的具体信息：<br />`eth.getTransaction("交易哈希")`<br />![捕获66.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660844134786-3ec12ae3-29e7-44ce-9b0e-98a1cc3da2e7.png#averageHue=%2313a10e&clientId=u12ad8043-c891-4&from=ui&id=u8a6d4b60&originHeight=353&originWidth=724&originalType=binary&ratio=1&rotation=0&showTitle=false&size=17280&status=done&style=none&taskId=u2b2bda36-291b-4ae4-a351-8880a830921&title=)<br />很好，现在你已经知道如何发起一笔转账并查询交易数据了，接下来再用MetaMask钱包来过一下瘾
 
-2.2 执行命令 ```geth --datadir data init genesis.json```
+<a name="FQ1OV"></a>
+# 四：与MetaMask交互
+首先，你得有一个MetaMask的钱包，没有就先下载一个<br />先要**导入本地的 "localhost" 网络**：<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660844665680-5a4612d7-4e8c-4620-8f60-06b22db1d991.png#averageHue=%23fefdfd&clientId=u12ad8043-c891-4&from=paste&height=554&id=u93b5c87c&originHeight=554&originWidth=991&originalType=binary&ratio=1&rotation=0&showTitle=false&size=50539&status=done&style=none&taskId=uf9fb4fe2-6c1d-4cd7-a772-b47ea39ad48&title=&width=991)
 
-![alt text](image.png)
+发现这儿没有，需要自己添加<br />![捕获100.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660844937786-dee02f63-7336-41d3-982b-82f4c6d4f785.png#averageHue=%23fefdfa&clientId=u12ad8043-c891-4&from=ui&id=ude41d518&originHeight=682&originWidth=446&originalType=binary&ratio=1&rotation=0&showTitle=false&size=19157&status=done&style=none&taskId=u5d50ad71-1dfd-499d-b62b-bec388ed4d4&title=)<br />除了链ID写自己genesis.json里的chainId外，其他直接照填<br />————然后就可以发起转账了<br />![捕获105.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660845254615-a19f8f3a-49f7-4b3f-b422-8c6f3722a783.png#averageHue=%23131313&clientId=ub6fc27fe-2e6b-4&from=ui&id=u8cc8d004&originHeight=119&originWidth=627&originalType=binary&ratio=1&rotation=0&showTitle=false&size=5492&status=done&style=none&taskId=ub92b2963-6d3a-4272-b3ae-eb24e39d76f&title=)<br />——可能出现了账户又被unlock了，这个时候需要再解锁一下from账户<br />交易完成后，发现MetaMask多了几个ETH：<br />![捕获106.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660845400352-749cd841-d484-48cf-bc80-4e23e5f6597f.png#averageHue=%23fefdfc&clientId=ub6fc27fe-2e6b-4&from=ui&id=u08aeaa36&originHeight=550&originWidth=361&originalType=binary&ratio=1&rotation=0&showTitle=false&size=16338&status=done&style=none&taskId=uefc00a7a-c742-4bab-a2e2-dfe0335dbcf&title=)<br />当然，这不是主网的ETH啦，是刚刚自己搭建的区块链上的ETH
 
-————此页面代表执行成功
 
-注意：此时，geth 文件夹中出现了 data 文件夹：
 
-![alt text](image-1.png)
+<a name="mKULO"></a>
+# 五：其他操作：
+<a name="f8V9D"></a>
+## 5.1  换一个人挖矿
+刚刚上面的操作，挖矿只能是eth.coinbase这个账户在挖，现在我们打算换一个账户：<br />就换我们自己MetaMask的账户来挖吧：<br />首先执行如下操作：<br />`miner.setEtherbase("地址")`<br />返回true后再进行挖矿：<br />![捕获166.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660845993785-d3d4bd85-a28b-4529-b7ad-b0432f04010f.png#averageHue=%2300130c&clientId=ub6fc27fe-2e6b-4&from=ui&id=u95f6b282&originHeight=121&originWidth=534&originalType=binary&ratio=1&rotation=0&showTitle=false&size=3372&status=done&style=none&taskId=u80b7754c-4c73-4d1f-b01b-01df80e2140&title=)<br />然后发现钱包多了好多ETH，刚刚还是10个的<br />![捕获155.PNG](https://cdn.nlark.com/yuque/0/2022/png/28544794/1660846104797-9e528ec7-5930-4aa3-9e69-ca4f3e108758.png#averageHue=%23fdfdfb&clientId=ub6fc27fe-2e6b-4&from=ui&id=ue3ff4b15&originHeight=484&originWidth=346&originalType=binary&ratio=1&rotation=0&showTitle=false&size=14999&status=done&style=none&taskId=u64c53577-b4fd-4d64-9d6c-a74ec2f08b6&title=)
 
-2.3 执行命令
+———以后的智能合约测试直接用本地自己搭建的链就行了，因为有用不完的ETH
 
-```geth --datadir ./data --networkid 2008 --port 30303 --http --http.addr 0.0.0.0 --http.vhosts "_" --http.api "db,net,eth,web3,personal" --http.corsdomain "_" --snapshot=false --allow-insecure-unlock```
 
-四个要注意的细节：
 
-● "--datadir ./data"，与 2.2 命令结合起来看，代表要将区块的数据放入哪个文件夹，因此两处命令的文件夹名称必须一致
 
-● networkid 一定要和 genesis.json 中的 chainId 参数一致
 
-● 与 http 相关的所有参数可以不写，如果不写，将无法和 MetaMask 等钱包进行交互（之前的版本使用的是 rpc，后来改成了 http）
 
-● --allow-insecure--unlock 参数可以不写，如果不写，意味着每次转账都需要先解锁账户，这个后面会再次提到
 
-![alt text](image-2.png)
-
-————此页面代表执行成功
-
-2.4  
-新打开一个 cmd（管理员模式），无需进入 geth 所在文件夹，直接执行命令：```geth attach ipc:\\.\pipe\geth.ipc```
-
-特别注意：之前的那个 cmd 不能关闭
-
-————此页面代表执行成功
-
-![alt text](image-3.png)
-
-至此，标准模式下的 Geth 已启动，私链已初始化完成
-
-一些补充：
-
-1. Geth 关闭后，如何重启
-
-经常有朋友把 geth 关了后，就不知道怎么重启了，这里统一做个说明
-
-● 如下有两个界面：
-
-上面这个界面称为 A，下面称为 B
-
-![alt text](image-4.png)
-
-![alt text](image-5.png)
-
-——如果仅关闭 A：
-
-重启方案：以管理员模式打开 cmd，无需进入到 geth 文件夹，直接输入 ```geth attach ipc:\\.\pipe\geth.ipc```
-
-——如果 A 与 B 都关了：
-
-重启方案：以管理员模式打开 cmd，进入 geth 文件夹，再输入：```geth --datadir ./data --networkid 2008 --port 30303 --http --http.addr 0.0.0.0 --http.vhosts "_" --http.api "db,net,eth,web3,personal" --http.corsdomain "_" --snapshot=false --allow-insecure-unlock```
-
-然后，用管理员模式打开一个新的 cmd，无需进入 geth 文件夹，直接输入 ```geth attach ipc:\\.\pipe\geth.ipc```
-
-——如果仅关闭 B：此情况不存在，因为把 B 关了 A 就不运行了，等于 A 也同时被关了
